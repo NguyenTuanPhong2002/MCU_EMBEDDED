@@ -36,14 +36,21 @@ Custom_Protocol_StateTypeDef UART_Receive(CustomProtocolRingBuffer *pData)
     {
         return CUSTOM_PROTOCOL_STATE_ERROR;
     }
-    
+
     uint8_t data[11] = {0xFF, 0x01, 0x00, 0x04, 0x01, 0x02, 0x03, 0x04, 0x00, 0x0A, 0x00};
 
     pData->size = 11;
 
-    memcpy(pData->data, data, 11);
-
-    pData->size = 11;
+    uint16_t index = 0;
+    while (index < pData->size)
+    {
+        pData->data[pData->write_index] = data[index];
+        if (++pData->write_index > CUSTOM_PROTOCOL_RING_BUFFER_SIZE)
+        {
+            pData->write_index = 0;
+        }
+        index++;
+    }
 
     return CUSTOM_PROTOCOL_STATE_OK;
 }

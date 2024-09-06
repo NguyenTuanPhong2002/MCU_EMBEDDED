@@ -41,9 +41,19 @@ int main(void)
 
   CPT_Transmit(protocolPtr, data, 4);
 
-  CPT_ReceiverIT(protocolPtr, 2000);
+  int result = 0;
 
-  CPT_Receiver_Process(protocolPtr);//use in the interrupt
+  for (int i = 0; i < 1000; i++)
+  {
+    CPT_ReceiverIT(protocolPtr, 2000);
+    if (CPT_Receiver_Process(protocolPtr) == CUSTOM_PROTOCOL_STATE_OK)
+    {
+      result++;
+      printf("receiver success %d\n",i);
+    }
+  }
+
+  printf("count receiver success %d\n", result);
 
   while (1)
   {
