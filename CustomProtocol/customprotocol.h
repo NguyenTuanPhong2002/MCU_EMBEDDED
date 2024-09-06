@@ -13,6 +13,8 @@
 #define CUSTOM_PROTOCOL_COMMAND_WRITE 0x00
 #define CUSTOM_PROTOCOL_SIZE 255U
 
+#define CUSTOM_PROTOCOL_RING_BUFFER_SIZE 255U
+
 #define CUSTOM_PROTOCOL_START_BIT 0xFF
 #define CUSTOM_PROTOCOL_END_BIT 0x00
 // #define NULL ((void *)0)
@@ -54,7 +56,7 @@ typedef enum
 
 typedef struct
 {
-    uint8_t data[CUSTOM_PROTOCOL_SIZE];
+    uint8_t data[CUSTOM_PROTOCOL_RING_BUFFER_SIZE];
     uint16_t read_index;
     uint16_t write_index;
     uint16_t size;
@@ -79,6 +81,7 @@ Custom_Protocol_StateTypeDef CPT_Init(Custom_Protocol_Handle_Typedef *protocol);
 Custom_Protocol_StateTypeDef CPT_Transmit(Custom_Protocol_Handle_Typedef *protocol, uint8_t *data, uint16_t length);
 Custom_Protocol_StateTypeDef CPT_ReceiverIT(Custom_Protocol_Handle_Typedef *protocol, uint32_t timeout);
 Custom_Protocol_StateTypeDef CPT_Receiver_Process(Custom_Protocol_Handle_Typedef *protocol);
+
 static uint16_t custom_protocol_checksum(uint8_t *data, uint16_t length);
 
 #endif

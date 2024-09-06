@@ -166,7 +166,10 @@ Custom_Protocol_StateTypeDef CPT_Receiver_Process(Custom_Protocol_Handle_Typedef
             break;
         }
 
-        protocol->buffer->read_index++;
+        if (protocol->buffer->read_index++ > CUSTOM_PROTOCOL_RING_BUFFER_SIZE)
+        {
+            protocol->buffer->read_index = 0;
+        }
     }
 
     return status;
