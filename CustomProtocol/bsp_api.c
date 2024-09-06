@@ -36,6 +36,7 @@ Custom_Protocol_StateTypeDef UART_Receive(CustomProtocolRingBuffer *pData)
     {
         return CUSTOM_PROTOCOL_STATE_ERROR;
     }
+    
     uint8_t data[11] = {0xFF, 0x01, 0x00, 0x04, 0x01, 0x02, 0x03, 0x04, 0x00, 0x0A, 0x00};
 
     pData->size = 11;

@@ -43,7 +43,7 @@ int main(void)
 
   CPT_ReceiverIT(protocolPtr, 2000);
 
-  CPT_Receiver_Process(protocolPtr);
+  CPT_Receiver_Process(protocolPtr);//use in the interrupt
 
   while (1)
   {
