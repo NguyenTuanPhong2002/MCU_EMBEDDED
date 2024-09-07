@@ -69,16 +69,29 @@ Custom_Protocol_StateTypeDef CPT_ReceiverIT(Custom_Protocol_Handle_Typedef *prot
 
     protocol->msg->step = CUSTOM_PROTOCOL_STEP_START_BIT;
 
-    protocol->Receive(protocol->buffer);
+    protocol->Receive(protocol->data);
 
     return CUSTOM_PROTOCOL_STATE_OK;
 }
 
-Custom_Protocol_StateTypeDef CPT_Receiver_Process(Custom_Protocol_Handle_Typedef *protocol)
+Custom_Protocol_StateTypeDef CPT_Receiver_Process(Custom_Protocol_Handle_Typedef *protocol, uint16_t size)
 {
     if (protocol == NULL)
     {
         return CUSTOM_PROTOCOL_STATE_ERROR;
+    }
+
+    protocol->buffer->size = size;
+
+    uint16_t index = 0;
+    while (index < protocol->buffer->size)
+    {
+        protocol->buffer->data[protocol->buffer->write_index] = protocol->data[index];
+        if (++protocol->buffer->write_index > CUSTOM_PROTOCOL_RING_BUFFER_SIZE)
+        {
+            protocol->buffer->write_index = 0;
+        }
+        index++;
     }
 
     Custom_Protocol_StateTypeDef status = CUSTOM_PROTOCOL_STATE_ERROR;
@@ -160,6 +173,7 @@ Custom_Protocol_StateTypeDef CPT_Receiver_Process(Custom_Protocol_Handle_Typedef
             if (protocol->buffer->data[protocol->buffer->read_index] == CUSTOM_PROTOCOL_END_BIT)
             {
                 status = CUSTOM_PROTOCOL_STATE_OK;
+                return status;
             }
             break;
         default:
@@ -171,6 +185,8 @@ Custom_Protocol_StateTypeDef CPT_Receiver_Process(Custom_Protocol_Handle_Typedef
             protocol->buffer->read_index = 0;
         }
     }
+
+    protocol->Receive(protocol->data);
 
     return status;
 }

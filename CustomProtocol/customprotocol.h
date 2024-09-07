@@ -7,7 +7,6 @@
 #define CUSTOMPROTOCOL_H_
 
 #include <stdint.h>
-#include <stdio.h>
 
 #define CUSTOM_PROTOCOL_COMMAND_READ 0x01
 #define CUSTOM_PROTOCOL_COMMAND_WRITE 0x00
@@ -17,7 +16,7 @@
 
 #define CUSTOM_PROTOCOL_START_BIT 0xFF
 #define CUSTOM_PROTOCOL_END_BIT 0x00
-// #define NULL ((void *)0)
+#define NULL ((void *)0)
 
 #define CUSTOM_PROTOCOL_TIMEOUT_ENABLE (1)
 
@@ -66,7 +65,7 @@ typedef struct
 {
     Custom_Protocol_StateTypeDef (*Init)(void);
     Custom_Protocol_StateTypeDef (*Transmit)(uint8_t *pData, uint16_t size);
-    Custom_Protocol_StateTypeDef (*Receive)(CustomProtocolRingBuffer *pData);
+    Custom_Protocol_StateTypeDef (*Receive)(uint8_t *pData);
 #if CUSTOM_PROTOCOL_TIMEOUT_ENABLE
     uint32_t (*get_tick_ms)(void);
     uint32_t timeout;
@@ -80,7 +79,7 @@ typedef struct
 Custom_Protocol_StateTypeDef CPT_Init(Custom_Protocol_Handle_Typedef *protocol);
 Custom_Protocol_StateTypeDef CPT_Transmit(Custom_Protocol_Handle_Typedef *protocol, uint8_t *data, uint16_t length);
 Custom_Protocol_StateTypeDef CPT_ReceiverIT(Custom_Protocol_Handle_Typedef *protocol, uint32_t timeout);
-Custom_Protocol_StateTypeDef CPT_Receiver_Process(Custom_Protocol_Handle_Typedef *protocol);
+Custom_Protocol_StateTypeDef CPT_Receiver_Process(Custom_Protocol_Handle_Typedef *protocol, uint16_t size);
 
 static uint16_t custom_protocol_checksum(uint8_t *data, uint16_t length);
 
